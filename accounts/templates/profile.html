@@ -25,10 +25,17 @@
 
     <h3>팔로워: {{ followers }}명</h3>
     <h3>팔로잉: {{ following }}명</h3>
-
+    
+    {% if user != request.user %}
     <form action="{% url 'follow' user.username %}" method="post">
-        {% csrf_token %}
-        <button type="submit">팔로우</button>
+            {% csrf_token %}
+            {% if request.user.is_authenticated and user in request.user.profile.following.all %}
+                <button type="submit">언팔로우</button>
+            {% else %}
+                <button type="submit">팔로우</button>
+            {% endif %}
+    </form>
+{% endif %}
     </form>
     <a href="{% url 'home' %}">메인 페이지로 돌아가기</a>
 
