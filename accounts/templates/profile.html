@@ -7,7 +7,7 @@
 
 <body>
     <h1>{{ user.username }}의 프로필</h1>
-    <p>가입일: {{ user.profile.joined_at }}</p>
+    <p>가입일: {{ request.user.date_joined | date:"Y년 m월 d일" }}</p>
     <h2>등록한 물건</h2>
     <ul>
         {% for item in items %}
@@ -30,9 +30,9 @@
     <form action="{% url 'follow' user.username %}" method="post">
         {% csrf_token %}
         {% if is_following %}
-            <button type="submit">언팔로우</button>
+        <button type="submit">언팔로우</button>
         {% else %}
-            <button type="submit">팔로우</button>
+        <button type="submit">팔로우</button>
         {% endif %}
     </form>
     {% endif %}
