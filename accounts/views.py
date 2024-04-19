@@ -45,12 +45,18 @@ def profile(request, username):
     favorites = Like.objects.filter(user=user).select_related('product')
     followers = user.followers.count()
     following = user.following.count()
+
+    is_following = False
+    if request.user.is_authenticated:
+        is_following = Follow.objects.filter(follower=request.user, following=user).exists()
+    
     context = {
         'user': user,
         'items': items,
         'favorites': [like.product for like in favorites],
         'followers': followers,
         'following': following,
+        'is_following': is_following,
     }
     return render(request, 'profile.html', context)
 
@@ -63,4 +69,7 @@ def follow(request, username):
     follow, created = Follow.objects.get_or_create(follower=request.user, following=user_to_follow)
     if not created:
         follow.delete()
+        messages.success(request, '언팔로우하였습니다.')
+    else:
+        messages.success(request, '팔로우하였습니다.')
     return redirect('profile', username=username)
