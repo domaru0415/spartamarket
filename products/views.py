@@ -1,22 +1,40 @@
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from .models import Product, Like
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 
 class ProductListView(ListView):
     model = Product
     template_name = 'product_list.html'
     context_object_name = 'products'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if user.is_authenticated:
+            liked_products_ids = user.like_set.values_list('product_id', flat=True)
+            context['liked_products_ids'] = liked_products_ids
+        else:
+            context['liked_products_ids'] = []
+        return context
 
 
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'product_detail.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = context['product']
+        user = self.request.user
+        if user.is_authenticated:
+            context['is_liked'] = product.like_set.filter(user=user).exists()
+        else:
+            context['is_liked'] = False
+        return context
 
 
 @method_decorator(login_required, name='dispatch')
@@ -54,5 +72,10 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
 
 def like_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    Like.objects.get_or_create(user=request.user, product=product)
-    return redirect('product_detail', pk=pk)
+    like, created = Like.objects.get_or_create(user=request.user, product=product)
+    
+    if not created:
+        like.delete()
+    
+    redirect_url = request.META.get('HTTP_REFERER', reverse('product_detail', kwargs={'pk': pk}))
+    return redirect(redirect_url)

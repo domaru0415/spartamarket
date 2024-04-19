@@ -1,21 +1,28 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <title>물건 목록</title>
 </head>
+
 <body>
     <h1>물건 목록</h1>
     <a href="{% url 'product_create' %}">새 물건 등록하기</a>
     <ul>
         {% for product in products %}
-            <li>
-                <a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a>
-                - {{ product.price }}원
-            </li>
+        <li>
+            <a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a>
+            - {{ product.price }}원
+            {% if product.pk in liked_products_ids %}
+            - <span style="color: red;">찜됨</span>
+            {% endif %}
+        </li>
         {% endfor %}
     </ul>
     <a href="{% url 'home' %}">메인 페이지로 돌아가기</a>
 
+
 </body>
+
 </html>
