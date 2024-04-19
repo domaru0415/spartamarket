@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-
+from django.http import HttpResponseForbidden
 
 class ProductListView(ListView):
     model = Product
@@ -35,13 +35,22 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'product_update.html'
     fields = ['name', 'description', 'price']
     success_url = reverse_lazy('product_list')
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.owner != request.user:
+            return HttpResponseForbidden("수정 권한이 없습니다.")
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'product_delete.html'
     success_url = reverse_lazy('product_list')
-
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.owner != request.user:
+            return HttpResponseForbidden("삭제 권한이 없습니다.")
+        return super().dispatch(request, *args, **kwargs)
 
 def like_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
