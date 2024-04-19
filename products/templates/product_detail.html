@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.name }}</title>
+</head>
+<body>
+    <h1>{{ product.name }}</h1>
+    <p>설명: {{ product.description }}</p>
+    <p>가격: {{ product.price }}원</p>
+    <a href="{% url 'product_update' product.pk %}">수정하기</a>
+    <a href="{% url 'product_delete' product.pk %}">삭제하기</a>
+    <a href="{% url 'product_like' product.pk %}">찜하기</a>
+    <a href="{% url 'product_list' %}">목록으로 돌아가기</a>
+    <a href="{% url 'home' %}">메인 페이지로 돌아가기</a>
+
+</body>
+</html>

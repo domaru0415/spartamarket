@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>메인 페이지</title>
+</head>
+
+<body>
+    {% if username %}
+    <h1>안녕하세요, {{ username }}님!</h1>
+    <a href="{% url 'signout' %}">로그아웃</a>
+    <a href="{% url 'profile' user.username %}">내 프로필</a>
+    <a href="{% url 'product_create' %}">물건 게시하기</a>
+    {% else %}
+    <h1>스파르타마켓에 오신 것을 환영합니다!</h1>
+    <a href="{% url 'signin' %}">로그인</a> | <a href="{% url 'signup' %}">회원가입</a>
+    {% endif %}
+
+    <a href="{% url 'product_list' %}" class="btn">물건 목록 보기</a>
+</body>
+
+</html>

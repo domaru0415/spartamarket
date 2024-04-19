@@ -1,0 +1,7 @@
+<h1>{{ object.name }}을(를) 삭제하시겠습니까?</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="submit" value="삭제 확인">
+    <a href="{% url 'product_list' %}">취소</a>
+</form>

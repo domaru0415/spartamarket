@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>물건 등록/수정</title>
+</head>
+<body>
+    <h1>물건 등록/수정</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">저장하기</button>
+    </form>
+    <a href="{% url 'home' %}">메인 페이지로 돌아가기</a>
+
+</body>
+</html>

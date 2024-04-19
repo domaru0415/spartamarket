@@ -1,0 +1,7 @@
+<h1>제품 {{ form.instance.pk|default:"생성" }}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">저장</button>
+</form>

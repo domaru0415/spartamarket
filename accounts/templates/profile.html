@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ user.username }}의 프로필</title>
+</head>
+
+<body>
+    <h1>{{ user.username }}의 프로필</h1>
+    <p>가입일: {{ user.profile.joined_at }}</p>
+    <h2>등록한 물건</h2>
+    <ul>
+        {% for item in items %}
+        <!-- 물건 표시 -->
+        <li>{{ item.name }} - {{ item.description }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>찜한 물건</h2>
+    <ul>
+        {% for product in favorites %}
+        <li>{{ product.name }} - {{ product.description }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>팔로워: {{ followers }}명</h3>
+    <h3>팔로잉: {{ following }}명</h3>
+
+    <h4>팔로우 하기</h4>
+    <form action="{% url 'follow' user.username %}" method="post">
+        {% csrf_token %}
+        <button type="submit">팔로우</button>
+    </form>
+    <a href="{% url 'home' %}">메인 페이지로 돌아가기</a>
+
+</body>
+
+</html>
