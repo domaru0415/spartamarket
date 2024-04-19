@@ -8,6 +8,8 @@
     <h1>{{ product.name }}</h1>
     <p>설명: {{ product.description }}</p>
     <p>가격: {{ product.price }}원</p>
+    <a href="{% url 'profile' product.owner.username %}">판매자 프로필 보기</a>
+
     <a href="{% url 'product_update' product.pk %}">수정하기</a>
     <a href="{% url 'product_delete' product.pk %}">삭제하기</a>
     <a href="{% url 'product_like' product.pk %}">찜하기</a>

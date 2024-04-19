@@ -26,7 +26,6 @@
     <h3>팔로워: {{ followers }}명</h3>
     <h3>팔로잉: {{ following }}명</h3>
 
-    <h4>팔로우 하기</h4>
     <form action="{% url 'follow' user.username %}" method="post">
         {% csrf_token %}
         <button type="submit">팔로우</button>
